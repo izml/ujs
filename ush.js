@@ -3,7 +3,7 @@
 // @author				Luchio & Stoen, izml
 // @namespace		https://github.com/izml
 // @homepage		https://github.com/izml/ujs
-// @version			1.6.5.1
+// @version			1.6.5.2
 // @lastmodified		2012-11-28
 // @description			高亮页面中的搜索项，统计结果，可与搜索引擎整合
 // @download			https://raw.github.com/izml/ujs/master/ush.js
@@ -613,10 +613,7 @@
 			preferences.highlightOnLoad=true;
 			if(!preferences.runOnLoad){
 				preferences.runOnLoad=true;
-				document.documentElement.appendChild(this.mOver);
-				document.documentElement.appendChild(this.bar);
-				if( !preferences.toolbarOverText ) { document.addEventListener('resize',this,false); }
-				this.enabled = true;
+				this.create();
 			}
 			return this.input.value;
 		}
