@@ -3,7 +3,7 @@
 // @author				Luchio & Stoen, izml
 // @namespace		https://github.com/izml
 // @homepage		https://github.com/izml/ujs
-// @version			1.6.5.2
+// @version			1.6.5.3
 // @lastmodified		2012-11-28
 // @description			高亮页面中的搜索项，统计结果，可与搜索引擎整合
 // @download			https://raw.github.com/izml/ujs/master/ush.js
@@ -595,12 +595,8 @@
 				(cIcon = bttn.appendChild(cIcon.cloneNode(false))).value=i;
 				cIcon.addEventListener('dblclick',function() {
 					StrArr.splice(this.value,1);
-					if(StrArr.length>0){
-						query=StrArr.join(" ");
-						run();
-					} else {
-						toolbar.input.value='';
-						USH.run('','new');
+					query=StrArr.join(" ");
+					run();
 					}
 				},false);
 				cIcon.title = strings._remove+' "'+text+'"';
@@ -822,6 +818,7 @@
 				var es=e.split(/[\s\n+|]+/);
 				var j=0;
 				if(query){
+					window.getSelection().removeAllRanges();
 					e=query;
 					query=' '+query+' ';
 				} else {
