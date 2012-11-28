@@ -3,7 +3,7 @@
 // @author				Luchio & Stoen, izml
 // @namespace		https://github.com/izml
 // @homepage		https://github.com/izml/ujs
-// @version			1.6.5.3
+// @version			1.6.5.4
 // @lastmodified		2012-11-28
 // @description			高亮页面中的搜索项，统计结果，可与搜索引擎整合
 // @download			https://raw.github.com/izml/ujs/master/ush.js
@@ -597,7 +597,6 @@
 					StrArr.splice(this.value,1);
 					query=StrArr.join(" ");
 					run();
-					}
 				},false);
 				cIcon.title = strings._remove+' "'+text+'"';
 				term.total = total;
