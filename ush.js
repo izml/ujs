@@ -3,8 +3,8 @@
 // @author				Luchio & Stoen, izml
 // @namespace		https://github.com/izml
 // @homepage		https://github.com/izml/ujs
-// @version			1.6.5.4
-// @lastmodified		2012-11-28
+// @version			1.6.5.5
+// @lastmodified		2012-12-1
 // @description			高亮页面中的搜索项，统计结果，可与搜索引擎整合
 // @download			https://raw.github.com/izml/ujs/master/ush.js
 // @include			*
@@ -14,7 +14,7 @@
 
 ((window.opera?window.opera:window).USH = new function() {
 	var preferences = {
-		highlightOnLoad: /*@页面载入时自动高亮@bool@*/true/*@*/,
+		highlightOnLoad: /*@页面载入时自动高亮@bool@*/false/*@*/,
 			hideColour: /*@初始时隐藏搜索项高亮颜色@bool@*/false/*@*/,
 			checkDocChanges: /*@检测到文档内容改变时重新执行高亮@bool@*/true/*@*/,
 			hideHighlightHTML: /*@移除对 Element.innerHTML 及 Element.outerHTML getters 的高亮@bool@*/true/*@*/,
@@ -229,8 +229,8 @@
 			sw = searchEngines[0]&2 && !preferences.useStopwords && /(?:^|\s)(?:intext:|(?:filetype|site|related|info|daterange|link|inurl|inanchor|intitle):\S*|(?:I|a|about|an|are|as|at|be|by|com|for|from|how|in|is|it|of|on|or|that|the|this|to|was|what|when|where|who|will|with|and|the|www)(?=$|\s))/gi;
 
 /*	注意!
- 	上面的单词不会被自动搜索,
- 	需要手动点击搜索按钮.
+	上面的单词不会被自动搜索,
+	需要手动点击搜索按钮.
 */
 
 			if( !q.indexOf('USHRegExp ') ) { isRE = true; q = q.substring(10); }
@@ -454,14 +454,7 @@
 				this.bar.setAttribute('mini','on');
 				this.mOver.setAttribute('mini','on');
 			}
-			if(preferences.runOnLoad){
-				document.documentElement.appendChild(this.mOver);
-				document.documentElement.appendChild(this.bar);
-				if( !preferences.toolbarOverText ) { document.addEventListener('resize',this,false); }
-				this.enabled = true;
-			} else {
-				this.enabled = false;
-			}
+			this.enable();
 		},
 		handleEvent: function(e,state) {
 			window.clearTimeout(this.timer);
@@ -604,11 +597,16 @@
 			}
 		},
 		enable:function(){
-			preferences.toolbarHiddenOnLoad=false;
-			preferences.highlightOnLoad=true;
 			if(!preferences.runOnLoad){
 				preferences.runOnLoad=true;
-				this.create();
+				preferences.toolbarHiddenOnLoad=false;
+				this.enabled = false;
+			} else {
+				document.documentElement.appendChild(this.mOver);
+				document.documentElement.appendChild(this.bar);
+				if( !preferences.toolbarOverText ) { document.addEventListener('resize',this,false); }
+				this.enabled = true;
+				preferences.highlightOnLoad=true;
 			}
 			return this.input.value;
 		}
@@ -744,19 +742,16 @@
 						keyChk = (this.keys[bttn]&1 || this.keys[bttn] == (e.ctrlKey<<1) + (e.shiftKey<<2))&&bttn;
 				if( keyChk == 'run' ) {
 					var text=window.getSelection().toString();
+					toolbar.create();
 					if(preferences.runOnLoad){
 						if(text==''){
 							toolbar.update();
 						} 
 					} else {
-						query=toolbar.enable();
+						toolbar.enable();
 					}
-					if(text==''){
-							return USH.run(query,'newSelect');
-					} else {
-						query+=' '+text
-						return USH.run(query,'newSearch');
-					}
+					return USH.run(text,'newSearch');
+					
 				}
 				if( el == toolbar.input ) {
 					toolbar.onInput.triggered = !e.which;
@@ -786,6 +781,7 @@
 		window.opera.addEventListener('AfterEvent.DOMContentLoaded',loadFn,false);
 		if( window == window.top ) {
 			searchData.assign();
+			if (!(preferences.runOnLoad && preferences.highlightOnLoad)) return;
 			if( query ) { saveVal('query',query); }
 		}
 	}
@@ -806,26 +802,24 @@
 /*	修改的地方：划词高亮
 	新增搜索时可以保留原来的高亮
 */
+			case 'newSearch':
+				toolbar.create();
 			case 'newS'+action.substring(4):
 			//	if( !e || e == window.location ) { 
 				if(e==''){
 					run();
 					i && i.focus();
-					return;
+					break;
 				}
 				searchEngines[0] = 2;
-				var es=e.split(/[\s\n+|]+/);
-				var j=0;
 				if(query){
+					e=query+' '+e;
 					window.getSelection().removeAllRanges();
-					e=query;
-					query=' '+query+' ';
-				} else {
-					e=es[0];
-					query=' ';
-					j=1;
 				}
-				for(var en; en=es[j]; j++){
+				query=' ';
+				var es=e.split(/[\s\n+|]+/);
+				e='';
+				for(var en,j=0; en=es[j]; j++){
 					if(en && query.indexOf(" "+en+" ")==-1){
 						e+=" "+en;
 						query+=en+" ";
