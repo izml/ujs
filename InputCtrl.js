@@ -2,12 +2,12 @@
 // @name		InputBox Controller
 // @author		izml
 // @description	Add Control Buttons to the InputBox Which Likes IE 10: Clear data & Show password!
-// @version		0.1
+// @version		0.1.1
 // @created		2012-12-1
 // @lastUpdated	2012-12-1
 // @namespace	https://github.com/izml/
 // @homepage	https://github.com/izml/ujs
-// @downloadURL	https://raw.github.com/izml/ujs/master/CtrlInput.js
+// @downloadURL	https://raw.github.com/izml/ujs/master/InputCtrl.js
 // @include		http*
 // ==/UserScript==
 
@@ -18,8 +18,9 @@ window.onload=function(){
 	if(document.doctype.name=='wml') return;
 	var ins=document.getElementsByTagName('input');
 	for(var i=ins.length-1;i>=0;i--){
-		var elem=document.createElement('FixForm');
-		elem.className='FixForm';
+		if(ins[i].disabled) break;
+		var elem=document.createElement('InputCtrl');
+		elem.className='InputCtrl';
 		switch(ins[i].type){
 			case 'text': case 'email':
 				elem.title='点击清除输出的内容！';
@@ -43,7 +44,7 @@ window.onload=function(){
 	}
 	if(CtrlInput){
 		var style=document.createElement('style');
-		style.innerHTML='.FixForm{position:absolute;display:inline; width:20px; height:20px; opacity:'+opacity+'; z-index:999;} .FixForm:hover{cursor:pointer; opacity:1;}';
+		style.innerHTML='.InputCtrl{position:absolute;display:inline; width:20px; height:20px; opacity:'+opacity+'; z-index:999;} .InputCtrl:hover{cursor:pointer; opacity:1;}';
 		document.head.appendChild(style);
 	}
 	function insertBefore(e,i){
