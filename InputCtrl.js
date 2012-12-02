@@ -2,7 +2,7 @@
 // @name		InputBox Controller
 // @author		izml
 // @description	Add Control Buttons to the InputBox Which Likes IE 10: Clear data & Show password!
-// @version		0.1.4.2
+// @version		0.1.4.3
 // @created		2012-12-1
 // @lastUpdated	2012-12-2
 // @namespace	https://github.com/izml/
@@ -35,7 +35,9 @@ function InputCtrl(){
 				elem.title='点击清除输出的内容！';
 				elem.style.background='url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAABPUlEQVR42tXTzStEURjH8dHkXUkxSMqe+A8MQvhTZE+yoWSjlJX8Fyy9ZDeYlfwNSl7m2ikXje9Tv1un69y35Zz61Myce3+dOc/zlEqtuvoy9tvRmTdsGtsYSwlbxjq68oRdoIFDDHqemUUNATbTQidwhh808YkjVLRfxhzutW8+sJEUOoxdvDsvvGJfewu4wZezf4sVXcO/1YZR3V+gF37xghPUnbBQ3+3EHVn32IsdPDsn+XY+hzrpfJG2GVBo4ARF6gorFwm0h5fwGAuzk55ipGhj+woQecNB3lCrVlV/K3Tu7CFWKKv+MYbSwqxaa7iLFeAai55CRX06nhQ4hSvnZE2FV3WnvkI19Jt39rs1n08KrWnM4i21pea3Al1qXBNXv0bJHlxNaForxh7OMZOnMD2YzJiAima/BdcfNBhmqx0AwNkAAAAASUVORK5CYII=)';
 				elem.onclick=function(e){
-					e.target.nextElementSibling.value='';
+					var i=e.target.nextElementSibling;
+					i.value='';
+					i.style.display='none !important';
 				};
 				insertBefore(elem,input);
 				break;
@@ -53,12 +55,13 @@ function InputCtrl(){
 	}
 	if(CtrlInput){
 		var style=document.createElement('style');
-		style.innerHTML='.InputCtrl{position:absolute;display:inline; width:20px; height:20px; background-repeat:no-repeat !important; background-position:center !important; opacity:'+opacity+'; z-index:999;} .InputCtrl:hover{cursor:pointer; opacity:1;}';
+		style.innerHTML='.InputCtrl{position:absolute; display:none; width:20px; height:20px; background-repeat:no-repeat !important; background-position:center !important; opacity:'+opacity+'; z-index:999;} .InputCtrl:hover{cursor:pointer; opacity:1;}';
 		document.head.appendChild(style);
 	}
 	function insertBefore(e,i){
 		CtrlInput=true;
 		i.parentNode.insertBefore(e,i);
+		i.oninput=InputState;
 		ChangePos(e,i);
 	}
 	function ChangePos(e,i){
@@ -76,5 +79,11 @@ function InputCtrl(){
 		}
 		c.style.marginLeft=(i.offsetWidth-24)+'px';
 		c.style.height=i.offsetHeight+'px';
-	};
+	}
+	function InputState(e){
+		var i=e.target;
+		var c=i.previousElementSibling;
+		if(i.value=='') c.style.display='none !important';
+		else c.style.display='inline !important';
+	}
 }
