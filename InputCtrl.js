@@ -2,7 +2,7 @@
 // @name		InputBox Controller
 // @author		izml
 // @description	Add Control Buttons to the InputBox Which Likes IE 10: Clear data & Show password!
-// @version		0.1.3
+// @version		0.1.4
 // @created		2012-12-1
 // @lastUpdated	2012-12-2
 // @namespace	https://github.com/izml/
@@ -11,13 +11,22 @@
 // @include		http*
 // ==/UserScript==
 
-window.onload=function(){
+window.onload=InputCtrl;
+window.addEventListener('DOMContentLoaded',InputCtrl,false);
+function InputCtrl(){
 	var opacity=0.15;		// 图标不透明度
 	var CtrlInput=false;
-	if(document.doctype.name=='wml') return;
+	try{if(document.doctype.name=='wml')return;}catch(evt){};
 	var ins=document.getElementsByTagName('input');
 	for(var i=ins.length-1;i>=0;i--){
 		if(ins[i].disabled) continue;
+		try{
+			var c=i.previousElementSibling;
+			if(c.tagName=='INPUTCTRL'){
+				ChangePos(c,i);
+				continue;
+			}
+		}catch(evt){};
 		var elem=document.createElement('InputCtrl');
 		elem.className='InputCtrl';
 		switch(ins[i].type){
@@ -43,7 +52,7 @@ window.onload=function(){
 	}
 	if(CtrlInput){
 		var style=document.createElement('style');
-		style.innerHTML='.InputCtrl{position:absolute;display:inline; width:20px; height:20px; opacity:'+opacity+'; z-index:999;} .InputCtrl:hover{cursor:pointer; opacity:1;}';
+		style.innerHTML='.InputCtrl{position:absolute;display:inline; width:20px; height:20px; background-repeat:no-repeat !important; background-position:center !important; opacity:'+opacity+'; z-index:999;} .InputCtrl:hover{cursor:pointer; opacity:1;}';
 		document.head.appendChild(style);
 	}
 	function insertBefore(e,i){
@@ -55,7 +64,7 @@ window.onload=function(){
 		if(arguments.length>1){
 			var c=e;
 			if(i.offsetParent==null){
-				c.style.left='320px';
+				c.style.marginLeft='280px';
 				i.addEventListener('mouseover',ChangePos,false);
 				return;
 			}
@@ -64,7 +73,7 @@ window.onload=function(){
 			i.removeEventListener('mouseover',ChangePos,false);
 			var c=i.previousElementSibling;
 		}
-		c.style.left=(i.offsetLeft+i.offsetWidth-24)+'px';
-		c.style.top=(i.offsetTop+(i.offsetHeight-20)/2)+'px';
+		c.style.marginLeft=(i.offsetWidth-24)+'px';
+		c.style.height=(i.clientHeight+i.clientTop*2)+'px';
 	};
 }
