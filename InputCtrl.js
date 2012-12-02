@@ -2,7 +2,7 @@
 // @name		InputBox Controller
 // @author		izml
 // @description	Add Control Buttons to the InputBox Which Likes IE 10: Clear data & Show password!
-// @version		0.1.2
+// @version		0.1.3
 // @created		2012-12-1
 // @lastUpdated	2012-12-2
 // @namespace	https://github.com/izml/
@@ -10,7 +10,6 @@
 // @downloadURL	https://raw.github.com/izml/ujs/master/InputCtrl.js
 // @include		http*
 // ==/UserScript==
-
 
 window.onload=function(){
 	var opacity=0.15;		// 图标不透明度
@@ -49,8 +48,23 @@ window.onload=function(){
 	}
 	function insertBefore(e,i){
 		CtrlInput=true;
-		e.style.marginTop=(i.offsetHeight-20)/2+'px'
-		e.style.marginLeft=(i.offsetWidth-24)+'px'
+		ChangePos(e,i);
 		i.parentNode.insertBefore(e,i);
 	}
+	function ChangePos(e,i){
+		if(arguments.length>1){
+			var c=e;
+			if(i.offsetParent==null){
+				c.style.left='320px';
+				i.addEventListener('mouseover',ChangePos,false);
+				return;
+			}
+		} else {
+			var i=e.target;
+			i.removeEventListener('mouseover',ChangePos,false);
+			var c=i.previousElementSibling;
+		}
+		c.style.left=(i.offsetLeft+i.offsetWidth-24)+'px';
+		c.style.top=(i.offsetTop+(i.offsetHeight-20)/2)+'px';
+	};
 }
