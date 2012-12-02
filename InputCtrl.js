@@ -1,14 +1,18 @@
 // ==UserScript==
-// @name		InputBox Controller
-// @author		izml
-// @description	Add Control Buttons to the InputBox Which Likes IE 10: Clear data & Show password!
-// @version		0.1.4.3
-// @created		2012-12-1
-// @lastUpdated	2012-12-2
-// @namespace	https://github.com/izml/
-// @homepage	https://github.com/izml/ujs
-// @downloadURL	https://raw.github.com/izml/ujs/master/InputCtrl.js
-// @include		http*
+// @name         InputBox Controller
+// @author       izml
+// @description  为输入框添加控制按钮，使其可以像 IE10 那样清除数据和显示密码！
+// @version      0.1.4.3
+// @created      2012-12-1
+// @lastUpdated  2012-12-2
+// @grant        none
+// @run-at       document-start
+// @namespace    http://userscripts.org/users/izml
+// @homepage     http://userscripts.org/scripts/show/153275
+// @updateURL    https://userscripts.org/scripts/source/153275.meta.js
+// @downloadURL  http://userscripts.org/scripts/source/153275.user.js
+// @downloadURL  https://raw.github.com/izml/ujs/master/InputCtrl.js
+// @include  http*
 // ==/UserScript==
 
 window.onload=InputCtrl;
