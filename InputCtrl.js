@@ -2,7 +2,7 @@
 // @name         InputBox Controller
 // @author       izml
 // @description  为输入框添加控制按钮，使其可以像 IE10 那样清除数据和显示密码！
-// @version      0.1.4.5
+// @version      0.1.4.6
 // @created      2012-12-1
 // @lastUpdated  2012-12-2
 // @grant        none
@@ -39,7 +39,7 @@ function InputCtrl(){
 				elem.style.background='url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAABPUlEQVR42tXTzStEURjH8dHkXUkxSMqe+A8MQvhTZE+yoWSjlJX8Fyy9ZDeYlfwNSl7m2ikXje9Tv1un69y35Zz61Myce3+dOc/zlEqtuvoy9tvRmTdsGtsYSwlbxjq68oRdoIFDDHqemUUNATbTQidwhh808YkjVLRfxhzutW8+sJEUOoxdvDsvvGJfewu4wZezf4sVXcO/1YZR3V+gF37xghPUnbBQ3+3EHVn32IsdPDsn+XY+hzrpfJG2GVBo4ARF6gorFwm0h5fwGAuzk55ipGhj+woQecNB3lCrVlV/K3Tu7CFWKKv+MYbSwqxaa7iLFeAai55CRX06nhQ4hSvnZE2FV3WnvkI19Jt39rs1n08KrWnM4i21pea3Al1qXBNXv0bJHlxNaForxh7OMZOnMD2YzJiAima/BdcfNBhmqx0AwNkAAAAASUVORK5CYII=)';
 				elem.onclick=function(e){
 					e.target.nextElementSibling.value='';
-					e.target.style.display='none !important';
+					e.target.style.display='none';
 				};
 				insertBefore(elem,input);
 				break;
@@ -79,13 +79,14 @@ function InputCtrl(){
 			i.removeEventListener('mouseover',ChangePos,false);
 			var c=i.previousElementSibling;
 		}
+		if(i.value!='') c.style.display='inline';
 		c.style.marginLeft=(i.offsetWidth-24)+'px';
 		c.style.height=i.offsetHeight+'px';
 	}
 	function InputState(e){
 		var i=e.target;
 		var c=i.previousElementSibling;
-		if(i.value=='') c.style.display='none !important';
-		else c.style.display='inline !important';
+		if(i.value=='') c.style.display='none';
+		else c.style.display='inline';
 	}
 }
