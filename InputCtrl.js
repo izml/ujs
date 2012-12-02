@@ -2,7 +2,7 @@
 // @name         InputBox Controller
 // @author       izml
 // @description  为输入框添加控制按钮，使其可以像 IE10 那样清除数据和显示密码！
-// @version      0.1.4.4
+// @version      0.1.4.5
 // @created      2012-12-1
 // @lastUpdated  2012-12-2
 // @grant        none
@@ -33,7 +33,6 @@ function InputCtrl(){
 			}
 		}catch(evt){};
 		var elem=document.createElement('InputCtrl');
-		elem.className='InputCtrl';
 		switch(input.type){
 			case 'text': case 'email':
 				elem.title='点击清除输出的内容！';
@@ -58,7 +57,7 @@ function InputCtrl(){
 	}
 	if(CtrlInput){
 		var style=document.createElement('style');
-		style.innerHTML='.InputCtrl{position:absolute; display:none; width:20px; height:20px; background-repeat:no-repeat !important; background-position:center !important; opacity:'+opacity+'; z-index:999;} .InputCtrl:hover{cursor:pointer; opacity:1;}';
+		style.innerHTML='InputCtrl{position:absolute; display:none; width:20px; height:20px; background-repeat:no-repeat !important; background-position:center !important; opacity:'+opacity+'; z-index:999;} InputCtrl:hover{cursor:pointer; opacity:1;}';
 		document.head.appendChild(style);
 	}
 	function insertBefore(e,i){
