@@ -2,7 +2,7 @@
 // @name         InputBox Controller
 // @author       izml
 // @description  为输入框添加控制按钮，使其可以像 IE10 那样清除数据和显示密码！
-// @version      0.1.5.9
+// @version      0.1.6.0
 // @created      2012-12-1
 // @lastUpdated  2012-12-3
 // @grant        none
@@ -107,8 +107,12 @@ function InputCtrl(){
 		if(c.getAttribute('Pos')=='1') return;
 		if(p!=null){
 			if(p.nodeType==3){
-				var left=i.offsetLeft+i.offsetWidth-c.offsetLeft-24;
-				SetCtrlXY(c,i.offsetTop-c.offsetTop,left);
+				if(/^\s+$/.test(p.textContent)){
+					SetCtrlPos(p.previousSibling,c,i);
+				} else {
+					var left=i.offsetLeft+i.offsetWidth-c.offsetLeft-24;
+					SetCtrlXY(c,i.offsetTop-c.offsetTop,left);
+				}
 				return;
 			}
 			if(p.type=='hidden'){
@@ -130,12 +134,10 @@ function InputCtrl(){
 			}
 		} else if(i.nextSibling==null){
 			var p=i.parentNode;
-			var left=i.offsetLeft+i.offsetWidth-c.offsetLeft-24
 			if(p.tagName!='TD'){
 				c.style.height=(p.offsetHeight)+'px';
-				left+=4;
 			}
-			SetCtrlXY(c,i.offsetTop-c.offsetTop,left);
+			SetCtrlXY(c,i.offsetTop-c.offsetTop,i.offsetWidth-24);
 			return
 		}
 		SetCtrlXY(c,0,i.offsetWidth-24);
