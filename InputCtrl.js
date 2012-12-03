@@ -2,7 +2,7 @@
 // @name         InputBox Controller
 // @author       izml
 // @description  为输入框添加控制按钮，使其可以像 IE10 那样清除数据和显示密码！
-// @version      0.1.5.3
+// @version      0.1.5.4
 // @created      2012-12-1
 // @lastUpdated  2012-12-3
 // @grant        none
@@ -93,25 +93,36 @@ function InputCtrl(){
 		}
 		SetCtrlVis(c,i);
 		c.style.height=i.offsetHeight+'px';
-		SetCtrlPos(c.previousElementSibling,c,i);
+		SetCtrlPos(c.previousSibling,c,i);
 	}
 	function SetCtrlPos(p,c,i){
+		if(c.getAttribute('Pos')=='1') return;
 		if(p!=null){
+			if(p.nodeType==3){
+				var left=i.offsetLeft+i.offsetWidth-c.offsetLeft-24
+				SetCtrlXY(c,i.offsetTop-c.offsetTop,left);
+				return;
+			}
 			if(p.tagName!="BR"){
 				var top=i.offsetTop-p.offsetTop;
 				var left=i.offsetLeft-p.offsetLeft;
 				if(p.offsetParent==null || (top==0 && left==0) ||c.offsetTop>=p.offsetTop+p.offsetHeight){
-					c.style.marginLeft=(i.offsetWidth-24)+'px'
+					SetCtrlXY(c,0,i.offsetWidth-24);
 					return;
 				}
-				if(top>=p.offsetHeight){
-					c.style.marginTop=top+'px';
-					c.style.marginLeft='-30px';
+				if(top>=p.offsetHeight || p.nodeType==3){
+					var left=i.offsetLeft+i.offsetWidth-c.offsetLeft-24;
+					SetCtrlXY(c,top,left);
 					return;
 				}
 			}
 		}
-		c.style.marginLeft=(i.offsetWidth-24)+'px'
+		SetCtrlXY(c,0,i.offsetWidth-24);
+	}
+	function SetCtrlXY(c,top,left){
+		c.style.marginLeft=top+'px';
+		c.style.marginLeft=left+'px';
+		c.setAttribute('Pos','1');
 	}
 	function SetCtrlVis(c,i){
 		if(i.value && i.value!='')
