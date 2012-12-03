@@ -2,7 +2,7 @@
 // @name         InputBox Controller
 // @author       izml
 // @description  为输入框添加控制按钮，使其可以像 IE10 那样清除数据和显示密码！
-// @version      0.1.5.6
+// @version      0.1.5.7
 // @created      2012-12-1
 // @lastUpdated  2012-12-3
 // @grant        none
@@ -51,18 +51,25 @@ function InputCtrl(){
 				elem.title='点击显示/隐藏密码！';
 				elem.style.background='url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAA8ElEQVR42mNgGAX0BBxArALETkDsB8UuQKwFxDykGsYCxHZAvByIzwLxWyD+CcUg9mUg3gjEHkDMRsgwJiA2AOKdQPwbiP8D8WcgXgzEGUCcAsSzgfg9VO4vEB8GYiOoQ7ACF6gr/kPxRyAugwYDDIBclodkMAhfhboaAyhBvfYfCS+EGhgExOeB+C4QR0HFFqKpfQ8NfxTQjqYIhBOgcjeRxK5DxbKwqG8l19DbULEMLOrbSfX+RXK8D4uo62RE1E1cEQVLUmbQZIKepNKAOAlLkjoNxBb4khS+xP8bit+jJX4OSrJpABSTnU1HwSAEABh0afnLZ5nIAAAAAElFTkSuQmCC)';
 				elem.type='pwd';
+				if(AutoHidePwd){
+					elem.onmouseover=function(e){
+						e.target.nextElementSibling.removeEventListener('blur',SetPwd,false);
+					};
+					elem.onmouseleave=function(e){
+						if(e.target.getAttribute('hide')=='1')
+							e.target.nextElementSibling.addEventListener('blur',SetPwd,false);
+					};
+				}
 				elem.onclick=function(e){
 					var pwd=e.target.nextElementSibling;
+					pwd.removeEventListener('blur',SetPwd,false)
 					pwd.type = (pwd.type=='text') ? 'password' : 'text';
 					pwd.focus();
 					if(!AutoHidePwd) return;
-					if(e.shiftKey){
-						pwd.removeEventListener('blur',SetPwd,false)
-					} else pwd.addEventListener('blur',SetPwd,false)
+					var b = (e.shiftKey) ? '0' : '1';
+					e.target.setAttribute('hide',b);
 				};
 				input.onkeypress=function(e){if(e.keyCode==13)SetPwd(e);};
-				if(AutoHidePwd)
-					input.addEventListener('blur',SetPwd,false)
 				insertBefore(elem,input);
 				break;
 			default:break;
@@ -116,7 +123,7 @@ function InputCtrl(){
 					SetCtrlXY(c,0,i.offsetWidth-24);
 					return;
 				}
-				if(top>=p.offsetHeight || p.nodeType==3){
+				if(top>=p.offsetHeight){
 					var left=i.offsetLeft+i.offsetWidth-c.offsetLeft-24;
 					SetCtrlXY(c,top,left);
 					return;
