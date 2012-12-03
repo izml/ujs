@@ -2,7 +2,7 @@
 // @name         InputBox Controller
 // @author       izml
 // @description  为输入框添加控制按钮，使其可以像 IE10 那样清除数据和显示密码！
-// @version      0.1.5.4
+// @version      0.1.5.5
 // @created      2012-12-1
 // @lastUpdated  2012-12-3
 // @grant        none
@@ -60,6 +60,7 @@ function InputCtrl(){
 						pwd.removeEventListener('blur',SetPwd,false)
 					} else pwd.addEventListener('blur',SetPwd,false)
 				};
+				input.onkeypress=function(e){if(e.keyCode==13)SetPwd(e);};
 				if(AutoHidePwd)
 					input.addEventListener('blur',SetPwd,false)
 				insertBefore(elem,input);
