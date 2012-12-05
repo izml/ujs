@@ -2,7 +2,7 @@
 // @name         InputBox Controller
 // @author       izml
 // @description  为输入框添加控制按钮，使其可以像 IE10 那样清除数据和显示密码！
-// @version      0.1.6.0
+// @version      0.1.6.1
 // @created      2012-12-1
 // @lastUpdated  2012-12-3
 // @grant        none
@@ -104,15 +104,20 @@ function InputCtrl(){
 		SetCtrlPos(c.previousSibling,c,i);
 	}
 	function SetCtrlPos(p,c,i){
-		if(c.getAttribute('Pos')=='1') return;
+		if(c.getAttribute('PosL')=='1') return;
+		var top=0,left=0;
 		if(p!=null){
 			if(p.nodeType==3){
 				if(/^\s+$/.test(p.textContent)){
 					SetCtrlPos(p.previousSibling,c,i);
+					return;
 				} else {
-					var left=i.offsetLeft+i.offsetWidth-c.offsetLeft-24;
-					SetCtrlXY(c,i.offsetTop-c.offsetTop,left);
+					left=i.offsetLeft+i.offsetWidth-c.offsetLeft-24;
+					top=i.offsetTop-c.offsetTop
 				}
+			}
+			if(p.nodeType==8){
+				SetCtrlPos(p.previousSibling,c,i);
 				return;
 			}
 			if(p.type=='hidden'){
@@ -120,16 +125,21 @@ function InputCtrl(){
 				return
 			}
 			if(p.tagName!="BR"){
-				var top=i.offsetTop-p.offsetTop;
-				var left=i.offsetLeft-p.offsetLeft;
+				top=i.offsetTop-p.offsetTop;
+				left=i.offsetLeft-p.offsetLeft;
 				if(p.offsetParent==null || (top==0 && left==0) ||c.offsetTop>=p.offsetTop+p.offsetHeight){
 					SetCtrlXY(c,0,i.offsetWidth-24);
 					return;
 				}
 				if(top>=p.offsetHeight){
-					var left=i.offsetLeft+i.offsetWidth-c.offsetLeft-24;
+					left=i.offsetLeft+i.offsetWidth-c.offsetLeft-24;
 					SetCtrlXY(c,top,left);
 					return;
+				}
+				var n=i.nextSibling;
+				if(n.offsetLeft<i.offsetLeft+i.offsetWidth && n.offsetTop+n.offsetHeight/2<i.offsetTop+i.offsetHeight){
+					top=i.offsetTop-c.offsetTop
+					left=n.offsetLeft-24
 				}
 			}
 		} else if(i.nextSibling==null){
@@ -139,13 +149,34 @@ function InputCtrl(){
 			}
 			SetCtrlXY(c,i.offsetTop-c.offsetTop,i.offsetWidth-24);
 			return
+		} else {	//B站
+			var n=i.nextSibling;
+			var left=i.offsetLeft+i.offsetWidth-24;
+		//	if(n.offsetLeft<left && n.offsetTop+n.offsetHeight/2<i.offsetTop+i.offsetHeight)
+		//		left=n.offsetLeft-24;	//A站
+			SetCtrlXY(c,i.offsetTop-c.offsetTop,left);
+			return;
 		}
 		SetCtrlXY(c,0,i.offsetWidth-24);
+	}
+	function FixCtrlPos(c,n){
+		return;
+		if(c.getAttribute('PosR')=='1') return;
+		if(n==null) return;
+		if((n.nodeType==3 && /^\s+$/.test(p.textContent)) || n.nodeType==8){
+			FixCtrlPos(c,n.nextSibling);
+		} else {
+//			alert(c.offsetLeft+'+'+n.offsetLeft)
+			if(c.offsetLeft+20>n.offsetLeft && n.offsetTop+n.offsetHeight/2<c.offsetTop+c.offsetHeight)
+				c.style.marginLeft=(n.offsetLeft-c.offsetLeft-24)+'px'
+		}
+		
 	}
 	function SetCtrlXY(c,top,left){
 		if(top!=0) c.style.marginTop=top+'px';
 		c.style.marginLeft=left+'px';
-		c.setAttribute('Pos','1');
+		FixCtrlPos(c,c.nextSibling.nextSibling);
+		c.setAttribute('PosL','1');
 	}
 	function SetCtrlVis(c,i){
 		if(i.value && i.value!='')
