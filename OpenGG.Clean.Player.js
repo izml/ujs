@@ -1,22 +1,20 @@
 // ==UserScript==
 // @name           OpenGG.Clean.Player
 // @namespace      http://OpenGG.me
-// @description    OpenGG.Clean.Player
-// @version        1.28
+// @description    OpenGG.Clean.Player for Opera
+// @version        1.29
 // @updateURL      https://userscripts.org/scripts/source/120679.meta.js
 // @downloadURL    https://userscripts.org/scripts/source/120679.user.js
+// @downloadURL    https://github.com/izml/ujs/raw/master/OpenGG.Clean.Player.js
 // @match          http://*/*
 // @match          https://*/*
 // @exclude        http://www.kuaipan.cn/*
 // ==/UserScript==
-//(function () {
-document.addEventListener('DOMContentLoaded',function(){	//++++++
+
+document.addEventListener('DOMContentLoaded',function(){
 	//Goddamn sina weibo.
 	//'use strict';
 	var Global = window;
-//	var window = this.window||window;
-	var unsafeWindow = window;
-	var unsafeGlobal = unsafeWindow; // Let's assume that...
 	var CONSTANTS = {
 		PLAYER_DOM:    ['object','embed','iframe'],
 		PLAYERS: [
@@ -26,6 +24,10 @@ document.addEventListener('DOMContentLoaded',function(){	//++++++
 			},
 			{
 				find: /^http:\/\/js\.tudouui\.com\/.*?\/TudouYoukuPlayer_Homer[^.]*?\.swf/,
+				replace: 'http://player.opengg.me/TudouYoukuPlayer_Homer_9.swf'
+			},
+			{
+				find: /^http:\/\/js\.tudouui\.com\/.*?\/PortalPlayer[^.]*?\.swf/,
 				replace: 'http://player.opengg.me/TudouYoukuPlayer_Homer_9.swf'
 			},
 			{
@@ -71,13 +73,6 @@ document.addEventListener('DOMContentLoaded',function(){	//++++++
 		},
 		proxy: function(callback, imports) {
 			return;
-			if(typeof (unsafeWindow)!=='undefined' && Global.navigator && Global.navigator.userAgent.indexOf('Firefox')!==-1){
-				callback.call(unsafeGlobal, unsafeGlobal, imports);
-				return;
-			}
-			var script = document.createElement('script');
-			script.textContent = '(' + callback.toString() + ')(this.window||window, '+JSON.stringify(imports)+');';
-			document.body.appendChild(script);
 		},
 		procFlash: function (elem, fn) {
 			if (DONE.indexOf(elem) !== -1) {
@@ -354,5 +349,4 @@ document.addEventListener('DOMContentLoaded',function(){	//++++++
 		}
 	}
 	UTIL.forEach(CONTROLLER, PROC);
-},false);	//++++++
-//})();
+},false);
