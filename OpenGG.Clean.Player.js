@@ -2,7 +2,7 @@
 // @name           OpenGG.Clean.Player
 // @namespace      http://OpenGG.me
 // @description    OpenGG.Clean.Player for Opera
-// @version        1.29
+// @version        1.30
 // @updateURL      https://userscripts.org/scripts/source/120679.meta.js
 // @downloadURL    https://userscripts.org/scripts/source/120679.user.js
 // @downloadURL    https://github.com/izml/ujs/raw/master/OpenGG.Clean.Player.js
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded',function(){
 			},
 			{
 				find: /^http:\/\/js\.tudouui\.com\/.*?\/PortalPlayer[^.]*?\.swf/,
-				replace: 'http://player.opengg.me/TudouYoukuPlayer_Homer_9.swf'
+				replace: 'http://player.opengg.me/PortalPlayer_7.swf'
 			},
 			{
 				find: /^http:\/\/js\.tudouui\.com\/.*?\/TudouVideoPlayer_Homer_[^.]*?.swf/,
